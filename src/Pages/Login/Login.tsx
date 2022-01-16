@@ -1,10 +1,10 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { setLogin, setLogout } from '../../features/auth/authSlice';
-import { OAuthResponse } from '../../types';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { setLogin, setLogout } from '../../features/auth/authSlice';
+import { auth } from '../../services/auth';
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
@@ -21,8 +21,7 @@ const Login = () => {
   useEffect(() => {
     if (codeFromGitHub) {
       setIsLoading(true);
-      axios
-        .get<OAuthResponse>(`http://localhost:5000/auth?code=${codeFromGitHub}`)
+      auth(codeFromGitHub)
         .then((response) => {
           const { username, authToken } = response.data;
           dispatch(setLogin({ username, authToken }));
