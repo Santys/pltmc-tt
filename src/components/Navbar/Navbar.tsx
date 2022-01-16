@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container, Image } from 'react-bootstrap';
+import { Container, Image, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import iconNavbar from '../../assets/img/icon.png';
 
