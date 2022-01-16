@@ -1,10 +1,10 @@
 import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { setLogin, setLogout } from '../../features/auth/authSlice';
-import { LoginGitHubSuccess } from '../../types/types';
+import { OAuthResponse } from '../../types';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
@@ -12,36 +12,36 @@ const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
 const Login = () => {
   const [searchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const username = useAppSelector((state) => state.auth.username);
+  const authToken = useAppSelector((state) => state.auth.authToken);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const codeFromGitHub = searchParams.get('code');
 
   useEffect(() => {
     if (codeFromGitHub) {
       setIsLoading(true);
       axios
-        .get(`http://localhost:5000/auth?code=${codeFromGitHub}`)
+        .get<OAuthResponse>(`http://localhost:5000/auth?code=${codeFromGitHub}`)
         .then((response) => {
           const { username, authToken } = response.data;
-          const authData = {
-            username,
-            authToken,
-          } as LoginGitHubSuccess;
-          dispatch(setLogin(authData));
+          dispatch(setLogin({ username, authToken }));
           setIsLoading(false);
-          navigate('/');
         })
+        // Not error typing
         .catch((error: Error | AxiosError) => {
-          if (axios.isAxiosError(error)) {
-            console.log(error);
-          } else {
-            console.log(error);
-          }
+          console.error(error);
           setIsLoading(false);
           dispatch(setLogout());
         });
     }
-  }, [codeFromGitHub, dispatch, navigate]);
+  }, [codeFromGitHub, dispatch]);
+
+  useEffect(() => {
+    if (username && authToken) {
+      navigate('/');
+    }
+  }, [username, authToken, navigate]);
 
   return (
     <Row className="h-100 align-items-center">

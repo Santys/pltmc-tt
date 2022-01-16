@@ -1,21 +1,19 @@
 import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, ListGroup, Row, Spinner } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import CardPokemon from '../../components/Card/Card';
-import { getPokemons } from '../../Services/pokemon';
-import { Pokemon } from '../../types/types';
-import { RootState } from '../../app/store';
+import { useAppSelector } from '../../app/hooks';
+import { getPokemons } from '../../services/pokemon';
+import { Pokemon } from '../../types';
 
 const Settings = () => {
-  const [data, setData] = useState([] as Pokemon[]);
+  const [data, setData] = useState<Pokemon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const username = useSelector((state: RootState) => state.auth.username);
+  const username = useAppSelector((state) => state.auth.username);
 
   useEffect(() => {
     getPokemons()
       .then((response) => {
-        const listPokemons: Pokemon[] = response.data.results;
+        const listPokemons = response.data.results;
 
         setData(listPokemons);
         setIsLoading(false);
@@ -26,7 +24,7 @@ const Settings = () => {
         } else {
           console.log(error);
         }
-        setData([] as Pokemon[]);
+        setData([]);
         setIsLoading(false);
       });
   }, []);

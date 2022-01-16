@@ -1,25 +1,22 @@
 import axios, { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../app/hooks';
 import CardPokemon from '../../components/Card/Card';
-import { getCharizard } from '../../Services/pokemon';
-import { Pokemon } from '../../types/types';
-import { RootState } from '../../app/store';
+import { getCharizard } from '../../services/pokemon';
 
 const Dashboard = () => {
   const [data, setData] = useState({ name: '', url: '' });
   const [isLoading, setIsLoading] = useState(true);
-  const username = useSelector((state: RootState) => state.auth.username);
+  const username = useAppSelector((state) => state.auth.username);
 
   useEffect(() => {
     getCharizard()
       .then((response) => {
-        console.log(response);
         const name = response.data.name;
         const url = response.data.sprites.front_default;
 
-        setData({ name, url } as Pokemon);
+        setData({ name, url });
         setIsLoading(false);
       })
       .catch((error: Error | AxiosError) => {
@@ -28,7 +25,7 @@ const Dashboard = () => {
         } else {
           console.log(error);
         }
-        setData({ name: '', url: '' } as Pokemon);
+        setData({ name: '', url: '' });
         setIsLoading(false);
       });
   }, []);

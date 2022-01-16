@@ -1,7 +1,11 @@
 import { Card } from 'react-bootstrap';
-import { Pokemon } from '../../types/types';
 
-const CardPokemon = ({ name, url }: Pokemon) => {
+type Props = {
+  name: string;
+  url: string;
+};
+
+const CardPokemon = ({ name, url }: Props) => {
   return (
     <Card className="h-100">
       <Card.Img variant="top" src={url} />
