@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setLogin, setLogout } from '../../features/auth/authSlice';
 import { auth } from '../../services/auth';
+import { HOMEPAGE } from '../../utils/paths';
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const redirect_uri = process.env.REACT_APP_REDIRECT_URI;
@@ -38,7 +39,7 @@ const Login = () => {
 
   useEffect(() => {
     if (username && authToken) {
-      navigate('/');
+      navigate(HOMEPAGE);
     }
   }, [username, authToken, navigate]);
 
