@@ -7,7 +7,7 @@ type Props = {
 
 const CardPokemon = ({ name, url }: Props) => {
   return (
-    <Card className="h-100">
+    <Card className="h-100 shadow">
       <Card.Img variant="top" src={url} />
       <Card.Body>
         <Card.Title className="text-truncate">{name}</Card.Title>

@@ -39,7 +39,9 @@ const Settings = () => {
           <>
             <ListGroup>
               {data.map((pokemon) => (
-                <ListGroup.Item key={pokemon.url.split('pokemon/')[1].slice(0, -1)}>{pokemon.name}</ListGroup.Item>
+                <ListGroup.Item className="text-capitalize" key={pokemon.url.split('pokemon/')[1].slice(0, -1)}>
+                  {pokemon.name}
+                </ListGroup.Item>
               ))}
             </ListGroup>
           </>
