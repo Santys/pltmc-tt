@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import { useAppSelector } from '../../app/hooks';
@@ -19,12 +19,9 @@ const Dashboard = () => {
         setData({ name, url });
         setIsLoading(false);
       })
+      // Not error typing
       .catch((error: Error | AxiosError) => {
-        if (axios.isAxiosError(error)) {
-          console.log(error);
-        } else {
-          console.log(error);
-        }
+        console.error(error);
         setData({ name: '', url: '' });
         setIsLoading(false);
       });
